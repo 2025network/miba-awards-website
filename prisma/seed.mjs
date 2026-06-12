@@ -3,16 +3,18 @@
 const prisma = new PrismaClient();
 
 const categories = [
-  ["Leadership Award", "Honoring ethical public, civic, and institutional leadership with measurable regional impact."],
-  ["Technology Award", "Celebrating digital builders advancing products, platforms, infrastructure, and technical talent."],
-  ["Innovation Award", "Recognizing original ideas and systems that solve real challenges across communities."],
-  ["Entrepreneurship Award", "Spotlighting founders and business leaders building durable ventures and jobs."],
-  ["Education Award", "For educators, institutions, and advocates expanding access, quality, and outcomes."],
-  ["Agriculture Award", "Honoring excellence in food systems, agribusiness, and rural value chains."],
-  ["Entertainment Award", "Celebrating artists, producers, filmmakers, and performers carrying culture forward."],
-  ["Community Impact Award", "Recognizing changemakers whose work improves lives at the community level."],
-  ["Youth Excellence Award", "For young achievers demonstrating courage, talent, service, and ambition."],
-  ["Lifetime Achievement Award", "A signature honor for sustained contribution, legacy, mentorship, and excellence."]
+  ["Leadership Excellence Award", "Honoring visionary leaders, public servants, civic voices, and institutional builders driving measurable progress."],
+  ["Entrepreneur of the Year", "Celebrating founders and business leaders creating jobs, value chains, and sustainable economic growth."],
+  ["Technology Innovator of the Year", "Recognizing digital builders, engineers, product creators, and technology leaders solving real problems."],
+  ["Agricultural Excellence Award", "Honoring farmers, agribusiness leaders, food-system innovators, and rural enterprise champions."],
+  ["Education Excellence Award", "Celebrating educators, institutions, mentors, and advocates improving learning access and outcomes."],
+  ["Youth Impact Award", "Recognizing young achievers demonstrating leadership, service, creativity, and continental ambition."],
+  ["Woman of Impact Award", "Honoring women whose leadership, enterprise, advocacy, or service creates lasting social value."],
+  ["Creative Excellence Award", "Celebrating artists, performers, filmmakers, designers, writers, and creators advancing culture and imagination."],
+  ["Community Development Award", "Recognizing changemakers improving local communities through service, inclusion, infrastructure, and empowerment."],
+  ["Healthcare Excellence Award", "Honoring healthcare professionals, advocates, innovators, and organizations improving wellbeing and access to care."],
+  ["Media Excellence Award", "Celebrating journalists, broadcasters, publishers, and media creators shaping informed public conversation."],
+  ["Lifetime Achievement Award", "A signature honor for sustained excellence, legacy, mentorship, service, and generational contribution."]
 ];
 
 async function main() {
@@ -22,9 +24,11 @@ async function main() {
     )
   );
 
-  const technology = savedCategories.find((category) => category.name === "Technology Award")!;
-  const education = savedCategories.find((category) => category.name === "Education Award")!;
-  const enterprise = savedCategories.find((category) => category.name === "Entrepreneurship Award")!;
+  const technology = savedCategories.find((category) => category.name === "Technology Innovator of the Year")!;
+  const education = savedCategories.find((category) => category.name === "Education Excellence Award")!;
+  const enterprise = savedCategories.find((category) => category.name === "Entrepreneur of the Year")!;
+  const community = savedCategories.find((category) => category.name === "Community Development Award")!;
+  const youth = savedCategories.find((category) => category.name === "Youth Impact Award")!;
 
   const savedNominees = [];
   const nominees = [
@@ -67,7 +71,7 @@ async function main() {
         nomineeName: "Samuel Oche",
         nomineeEmail: "samuel@example.com",
         nomineePhone: "+234000000001",
-        categoryId: savedCategories[7].id,
+        categoryId: community.id,
         reason: "Led clean water and youth skills projects across underserved communities.",
         submittedBy: "Grace Ene",
         submitterEmail: "grace@example.com"
@@ -76,7 +80,7 @@ async function main() {
         nomineeName: "Maryam Bitrus",
         nomineeEmail: "maryam@example.com",
         nomineePhone: "+234000000002",
-        categoryId: savedCategories[8].id,
+        categoryId: youth.id,
         reason: "Built a peer learning network supporting young women in technology and enterprise.",
         submittedBy: "Daniel Musa",
         submitterEmail: "daniel@example.com"
@@ -145,6 +149,7 @@ async function main() {
       comments: "Strong technical originality and measurable civic impact."
     }
   });
+
   const eventDate = new Date("2026-12-12T18:00:00+01:00");
   await prisma.awardEvent.create({
     data: {
@@ -163,7 +168,7 @@ async function main() {
 
   await prisma.announcement.createMany({
     data: [
-      { title: "MIBA 2026 nominations are open", content: "The Middle Belt Awards nomination window is now open for leaders, creators, founders, and changemakers.", published: true },
+      { title: "MIBA 2026 nominations are open", content: "The Middle Belt Impact Awards nomination window is now open for leaders, creators, founders, and changemakers.", published: true },
       { title: "Judging framework announced", content: "Nominees will be reviewed across leadership, innovation, impact, influence, and overall excellence.", published: true }
     ],
     skipDuplicates: true
@@ -179,4 +184,3 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
-
