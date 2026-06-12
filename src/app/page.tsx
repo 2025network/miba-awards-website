@@ -1,4 +1,5 @@
-﻿import { PageShell } from "@/components/PageShell";
+﻿import type { Metadata } from "next";
+import { PageShell } from "@/components/PageShell";
 import { AboutSection } from "@/sections/AboutSection";
 import { CategoriesSection } from "@/sections/CategoriesSection";
 import { CountdownSection } from "@/sections/CountdownSection";
@@ -11,6 +12,11 @@ import { SponsorsCarouselSection } from "@/sections/SponsorsCarouselSection";
 import { SponsorsSection } from "@/sections/SponsorsSection";
 import { StatsSection } from "@/sections/StatsSection";
 import { VideoSection } from "@/sections/VideoSection";
+
+export const metadata: Metadata = {
+  title: "MIBA Awards | Middle Belt Impact Awards",
+  description: "Middle Belt Impact Awards celebrates excellence, leadership, innovation, entrepreneurship, culture, education, youth impact, and community changemakers across Nigeria's Middle Belt and Africa."
+};
 
 export default function Home() {
   return (

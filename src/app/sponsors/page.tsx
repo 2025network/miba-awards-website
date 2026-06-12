@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/sections/PageHero";
 import { SponsorsSection } from "@/sections/SponsorsSection";
+
+export const metadata: Metadata = {
+  title: "Sponsors and Partners | MIBA Awards",
+  description: "Partner with the Middle Belt Impact Awards to support excellence, innovation, culture, and community impact."
+};
 
 export default function SponsorsPage() {
   return (

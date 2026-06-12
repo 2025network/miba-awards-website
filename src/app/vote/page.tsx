@@ -1,7 +1,13 @@
-﻿import { Suspense } from "react";
+import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PageShell } from "@/components/PageShell";
 import { PublicNomineeListing } from "@/components/forms/PublicNomineeListing";
 import { PageHero } from "@/sections/PageHero";
+
+export const metadata: Metadata = {
+  title: "Vote | MIBA Awards",
+  description: "Public voting for MIBA Awards nominees opens after nominations are reviewed and approved."
+};
 
 export default function VotePage() {
   return (

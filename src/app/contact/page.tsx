@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/sections/PageHero";
+
+export const metadata: Metadata = {
+  title: "Contact | MIBA Awards",
+  description: "Contact the Middle Belt Impact Awards team for nominations, sponsorship, media, partnership, and event enquiries."
+};
 
 export default function ContactPage() {
   return (

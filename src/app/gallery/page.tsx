@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { Camera } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { galleryItems } from "@/data/awards";
 import { PageHero } from "@/sections/PageHero";
+
+export const metadata: Metadata = {
+  title: "Media Gallery | MIBA Awards",
+  description: "Explore MIBA Awards ceremony moments, cultural highlights, winner interviews, and media coverage placeholders."
+};
 
 export default function GalleryPage() {
   return (

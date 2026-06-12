@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Eye, Vote } from "lucide-react";
+import { Clock, Eye, Vote } from "lucide-react";
+import { fallbackNominees } from "@/data/awards";
 
 type Nominee = {
   id: string;
@@ -19,9 +20,10 @@ type Nominee = {
 export function PublicNomineeListing({ approvedOnly = false }: { approvedOnly?: boolean }) {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("category");
-  const [nominees, setNominees] = useState<Nominee[]>([]);
-  const [message, setMessage] = useState("Loading nominees...");
+  const [nominees, setNominees] = useState<Nominee[]>(fallbackNominees);
+  const [message, setMessage] = useState(approvedOnly ? "Voting will open after nominations are approved." : "Nominee profiles are being prepared for launch.");
   const [email, setEmail] = useState("");
+  const [usingFallback, setUsingFallback] = useState(true);
 
   const load = useCallback(async () => {
     const params = new URLSearchParams();
@@ -29,11 +31,21 @@ export function PublicNomineeListing({ approvedOnly = false }: { approvedOnly?: 
     if (categoryId) params.set("categoryId", categoryId);
     const response = await fetch(`/api/nominees${params.toString() ? `?${params.toString()}` : ""}`);
     if (!response.ok) {
-      setMessage("Nominees are unavailable until the database is connected.");
+      setNominees(fallbackNominees);
+      setUsingFallback(true);
+      setMessage(approvedOnly ? "Voting will open after nominations are approved." : "Nominee profiles are being prepared for launch.");
       return;
     }
-    setNominees((await response.json()) as Nominee[]);
-    setMessage("");
+    const data = (await response.json()) as Nominee[];
+    if (data.length) {
+      setNominees(data);
+      setUsingFallback(false);
+      setMessage("");
+      return;
+    }
+    setNominees(fallbackNominees);
+    setUsingFallback(true);
+    setMessage(approvedOnly ? "Voting will open after nominations are approved." : "Nominee profiles are being prepared for launch.");
   }, [approvedOnly, categoryId]);
 
   useEffect(() => {
@@ -41,6 +53,10 @@ export function PublicNomineeListing({ approvedOnly = false }: { approvedOnly?: 
   }, [load]);
 
   async function vote(nomineeId: string) {
+    if (usingFallback) {
+      setMessage("Voting will open after nominations are approved.");
+      return;
+    }
     if (!email) {
       setMessage("Enter your email before voting.");
       return;
@@ -50,16 +66,16 @@ export function PublicNomineeListing({ approvedOnly = false }: { approvedOnly?: 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nomineeId, voterEmail: email })
     });
-    setMessage(response.ok ? "Vote recorded." : "Vote could not be recorded. You may have already voted for this nominee.");
+    setMessage(response.ok ? "Vote recorded." : "Voting will open after nominations are approved.");
     if (response.ok) await load();
   }
 
   return (
     <div>
-      <div className="mb-8 max-w-md">
-        <input className="field" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email for public voting" type="email" />
+      <div className="mb-8 grid gap-4 md:grid-cols-[minmax(0,420px)_1fr] md:items-center">
+        <input className="field" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email for public voting" type="email" disabled={usingFallback} />
+        {message ? <p className="inline-flex items-center gap-2 border border-aureate/24 bg-aureate/10 px-4 py-3 text-sm font-semibold text-aureate"><Clock size={16} /> {message}</p> : null}
       </div>
-      {message ? <p className="mb-6 text-sm text-aureate">{message}</p> : null}
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {nominees.map((nominee) => (
           <article className="glass-panel p-6" key={nominee.id}>
@@ -69,8 +85,8 @@ export function PublicNomineeListing({ approvedOnly = false }: { approvedOnly?: 
             <p className="mt-4 line-clamp-3 text-sm leading-7 text-champagne/72">{nominee.biography}</p>
             <p className="mt-4 text-xs font-black uppercase tracking-[0.2em] text-champagne/52">Votes: {nominee._count.votes}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link className="inline-flex min-h-10 items-center gap-2 border border-champagne/18 px-3 text-xs font-black uppercase tracking-[0.16em] text-aureate" href={`/nominees/${nominee.id}`}><Eye size={16} /> Profile</Link>
-              <button className="inline-flex min-h-10 items-center gap-2 bg-aureate px-3 text-xs font-black uppercase tracking-[0.16em] text-obsidian" onClick={() => vote(nominee.id)} type="button"><Vote size={16} /> Vote</button>
+              <Link className="inline-flex min-h-10 items-center gap-2 border border-champagne/18 px-3 text-xs font-black uppercase tracking-[0.16em] text-aureate" href={usingFallback ? "/nominate" : `/nominees/${nominee.id}`}><Eye size={16} /> {usingFallback ? "Opening Soon" : "Profile"}</Link>
+              <button className="inline-flex min-h-10 items-center gap-2 bg-aureate px-3 text-xs font-black uppercase tracking-[0.16em] text-obsidian disabled:bg-champagne/35" onClick={() => vote(nominee.id)} type="button" disabled={usingFallback}><Vote size={16} /> Vote</button>
             </div>
           </article>
         ))}

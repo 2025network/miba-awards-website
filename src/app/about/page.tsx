@@ -1,4 +1,5 @@
-﻿import { Award, Eye, Globe2, HandHeart, Landmark, Lightbulb, ShieldCheck, Sparkles, Target, Users } from "lucide-react";
+import type { Metadata } from "next";
+import { Award, Eye, Globe2, HandHeart, Landmark, Lightbulb, ShieldCheck, Sparkles, Target, Users } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { CtaSection } from "@/sections/CtaSection";
 import { PageHero } from "@/sections/PageHero";
@@ -32,6 +33,11 @@ const difference = [
   "A structured awards workflow with nominations, reviews, public voting, judging, scoring, and winner rankings.",
   "A premium black-and-gold awards experience designed to make local impact visible at a national and international standard."
 ];
+
+export const metadata: Metadata = {
+  title: "About MIBA | Middle Belt Impact Awards",
+  description: "Learn about the mission, vision, values, and purpose of the Middle Belt Impact Awards across Nigeria and Africa."
+};
 
 export default function AboutPage() {
   return (

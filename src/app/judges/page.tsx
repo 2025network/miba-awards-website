@@ -1,6 +1,12 @@
-﻿import { PageShell } from "@/components/PageShell";
+import type { Metadata } from "next";
+import { PageShell } from "@/components/PageShell";
 import { PublicJudgesClient } from "@/components/forms/PublicJudgesClient";
 import { PageHero } from "@/sections/PageHero";
+
+export const metadata: Metadata = {
+  title: "Meet The Judges | MIBA Awards",
+  description: "Meet the respected MIBA Awards judging panel reviewing nominees across assigned award categories."
+};
 
 export default function JudgesPage() {
   return (
