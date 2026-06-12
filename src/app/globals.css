@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --gold: #d9a441;
+  --cream: #f6e7bc;
+  --black: #060504;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(217, 164, 65, 0.18), transparent 28rem),
+    radial-gradient(circle at 85% 0%, rgba(246, 231, 188, 0.1), transparent 24rem),
+    #060504;
+  color: #fff8e6;
+  font-family:
+    "Inter",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(217, 164, 65, 0.45);
+  color: #fff8e6;
+}
+
+.section-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #fff8e6 0%, #f6d681 32%, #d9a441 58%, #8f6422 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.luxury-border {
+  border: 1px solid rgba(246, 231, 188, 0.16);
+}
+
+.glass-panel {
+  background: linear-gradient(145deg, rgba(255, 248, 230, 0.09), rgba(217, 164, 65, 0.04));
+  border: 1px solid rgba(246, 231, 188, 0.14);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(18px);
+}
+
+.field {
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid rgba(246, 231, 188, 0.18);
+  background: rgba(255, 248, 230, 0.06);
+  padding: 0 14px;
+  color: #fff8e6;
+  outline: none;
+}
+
+.field:focus {
+  border-color: rgba(217, 164, 65, 0.85);
+  box-shadow: 0 0 0 4px rgba(217, 164, 65, 0.1);
+}
+
+.textarea {
+  min-height: 140px;
+  padding-block: 12px;
+  resize: vertical;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(246, 231, 188, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(246, 231, 188, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(246, 214, 129, 0.78);
+  box-shadow: 0 0 18px rgba(217, 164, 65, 0.75);
+}

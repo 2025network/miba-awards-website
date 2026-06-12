@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EmailStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
+model Category {
+  id               String          @id @default(cuid())
+  name             String          @unique
+  description      String
+  createdAt        DateTime        @default(now())
+  nominees         Nominee[]
+  nominations      Nomination[]
+  judgeAssignments JudgeCategory[]
+  judgeScores      JudgeScore[]
+}
+
+model Nominee {
+  id           String       @id @default(cuid())
+  fullName     String
+  photo        String?
+  biography    String
+  categoryId   String
+  organization String?
+  state        String
+  status       ReviewStatus @default(PENDING)
+  createdAt    DateTime     @default(now())
+  category     Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  votes        Vote[]
+  judgeScores  JudgeScore[]
+}
+
+model Nomination {
+  id             String       @id @default(cuid())
+  nomineeName    String
+  nomineeEmail   String
+  nomineePhone   String
+  categoryId     String
+  reason         String
+  submittedBy    String
+  submitterEmail String
+  status         ReviewStatus @default(PENDING)
+  createdAt      DateTime     @default(now())
+  category       Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  nomineeId  String
+  voterEmail String
+  createdAt  DateTime @default(now())
+  nominee    Nominee  @relation(fields: [nomineeId], references: [id], onDelete: Cascade)
+
+  @@unique([nomineeId, voterEmail])
+}
+
+model Sponsor {
+  id          String   @id @default(cuid())
+  companyName String
+  logo        String?
+  website     String?
+  tier        String
+  createdAt   DateTime @default(now())
+}
+
+model Judge {
+  id           String          @id @default(cuid())
+  fullName     String
+  email        String          @unique
+  photo        String?
+  title        String
+  organization String
+  biography    String
+  password     String
+  createdAt    DateTime        @default(now())
+  assignments  JudgeCategory[]
+  scores       JudgeScore[]
+}
+
+model JudgeCategory {
+  id         String   @id @default(cuid())
+  judgeId    String
+  categoryId String
+  createdAt  DateTime @default(now())
+  judge      Judge    @relation(fields: [judgeId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([judgeId, categoryId])
+}
+
+model JudgeScore {
+  id              String   @id @default(cuid())
+  judgeId         String
+  nomineeId       String
+  categoryId      String
+  scoreLeadership Int
+  scoreInnovation Int
+  scoreImpact     Int
+  scoreInfluence  Int
+  scoreOverall    Int
+  comments        String?
+  createdAt       DateTime @default(now())
+  judge           Judge    @relation(fields: [judgeId], references: [id], onDelete: Cascade)
+  nominee         Nominee  @relation(fields: [nomineeId], references: [id], onDelete: Cascade)
+  category        Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([judgeId, nomineeId])
+}
+
+model EmailLog {
+  id        String      @id @default(cuid())
+  recipient String
+  subject   String
+  status    EmailStatus @default(QUEUED)
+  sentAt    DateTime?
+  createdAt DateTime    @default(now())
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AwardEvent {
+  id                   String   @id @default(cuid())
+  title                String
+  venue                String
+  eventDate            DateTime
+  registrationOpen     DateTime
+  registrationClose    DateTime
+  votingOpen           DateTime
+  votingClose          DateTime
+  judgeScoringOpen     DateTime
+  judgeScoringClose    DateTime
+  winnerAnnouncementAt DateTime?
+  createdAt            DateTime @default(now())
+}
